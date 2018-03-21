@@ -1,9 +1,10 @@
 // Copyright 2017 Rigo Investment Sarl.
 // This file is part of RigoBlock.
 
-import * as abis from '../abi';
+import * as abis from '../../contracts/abi';
 import Registry from '../registry';
-import { toHex } from '../../Utils';
+import { toHex } from '../../utils';
+import { EXCHANGE } from '../../utils/const'
 
 class exchangeParity {
   constructor (api) {
@@ -14,7 +15,7 @@ class exchangeParity {
     this._abi = abis.exchange
     this._registry = new Registry(api)
     this._constunctorName = this.constructor.name
-    this._contractName = 'exchange2'
+    this._contractName = EXCHANGE
   }
 
   get instance () {

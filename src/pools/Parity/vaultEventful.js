@@ -1,20 +1,22 @@
 // Copyright 2017 Rigo Investment Sarl.
 // This file is part of RigoBlock.
 
-import * as abis from '../abi';
+import * as abis from '../../contracts/abi';
 import Registry from '../registry';
-import { toHex } from '../../Utils';
+import { toHex } from '../../utils';
+import { VAULTEVENTFUL } from '../../utils/const'
 
-class DragoFactoryParity {
+class VaultEventfulParity {
   constructor (api) {
     if (!api) {
       throw new Error('API instance needs to be provided to Contract')
     }
     this._api = api
-    this._abi = abis.dragofactory
+    this._abi = abis.vaulteventful
     this._registry = new Registry(api)
     this._constunctorName = this.constructor.name
-    this._contractName = 'dragofactory'
+    this._contractName = VAULTEVENTFUL
+    // console.log(abis)
   }
 
   get instance () {
@@ -51,33 +53,10 @@ class DragoFactoryParity {
       })
   }
 
-  createDrago = (dragoName, dragoSymbol, accountAddress) => {
-    if (!dragoName) {
-      throw new Error('dragoName needs to be provided')
-    }
-    if (!dragoSymbol) {
-      throw new Error('dragoSymbol needs to be provided')
-    }
-    if (!accountAddress) {
-      throw new Error('accountAddress needs to be provided')
-    }
-    const instance = this._instance
-    const options = {
-      from: accountAddress
-    };
-    const values = [dragoName, dragoSymbol, accountAddress]
-    return instance.createDrago
-    .estimateGas(options, values)
-    .then((gasEstimate) => {
-      console.log(gasEstimate.toFormat())
-      options.gas = gasEstimate.mul(1.2).toFixed(0);
-      return instance.createDrago.postTransaction(options, values)
-      // .then((receipt) => {
-      //   console.log(receipt)
-      //   return receipt
-      // })
-    })
+  getAllLogs = (topics = {topics: [ null, null, null, null]}) =>{
+    const contract = this._contract
+    return contract.getAllLogs(topics)
   }
 }
 
-export default DragoFactoryParity;
+export default VaultEventfulParity;
