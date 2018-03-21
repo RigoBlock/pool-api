@@ -1,4 +1,4 @@
-# DragoApi
+# PoolApi
 
 ### A js wrapper around RigoBlock Smart Contracts to simplify their consumption.
 
@@ -7,17 +7,17 @@
 ### Example
 
 
-Import DragoAPI class and create an instance passing a Parity API/Web3 instance.
+Import PoolApi class and create an instance passing a Parity API/Web3 instance.
 
 Getting drago details from DragoRegistry contract:
 ```javascript
-import DragoApi from '../../DragoApi/src'
+import PoolApi from '../../PoolApi/src'
 
-const dragoApi = new DragoApi(api)
-dragoApi.contract.dragoregistry
+const PoolApi = new PoolApi(api)
+PoolApi.contract.dragoregistry
   .init()
   .then(() =>{
-    dragoApi.contract.dragoregistry
+    PoolApi.contract.dragoregistry
     .drago(dragoID)
     .then((dragoDetails) => {
       console.log(dragoDetails)
@@ -31,28 +31,28 @@ Getting drago prices from DragoEVO contract:
 // Initializing Drago API
 // Passing Parity API
 //
-const dragoApi = new DragoApi(api)
+const PoolApi = new PoolApi(api)
 //
 // Initializing registry contract
 //
-dragoApi.contract.dragoregistry
+PoolApi.contract.dragoregistry
   .init()
   .then((address) =>{
     //
     // Looking for drago from dragoID
     //
-    dragoApi.contract.dragoregistry
+    PoolApi.contract.dragoregistry
     .drago(dragoID)
     .then((dragoDetails) => {
       const dragoAddress = dragoDetails[0][0]
       //
       // Initializing drago contract
       //
-      dragoApi.contract.drago.instance(dragoAddress)
+      PoolApi.contract.drago.instance(dragoAddress)
       //
       // Calling getData method
       //
-      dragoApi.contract.drago.getData()
+      PoolApi.contract.drago.getData()
       .then((data) =>{
         this.setState({
           dragoDetails: {
