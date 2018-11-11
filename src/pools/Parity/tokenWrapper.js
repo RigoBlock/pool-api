@@ -2,16 +2,15 @@
 // This file is part of RigoBlock.
 
 import * as abis from '../../contracts/abi'
-import { RIGOTOKEN_ADDRESSES } from '../../utils/const'
 import Registry from '../registry'
 
-class RigoTokenParity {
+class TokenWrapperParity {
   constructor(api) {
     if (!api) {
       throw new Error('API instance needs to be provided to Contract')
     }
     this._api = api
-    this._abi = abis.rigotoken
+    this._abi = abis.tokenWrapper
     this._registry = new Registry(api)
     this._constunctorName = this.constructor.name
   }
@@ -23,10 +22,9 @@ class RigoTokenParity {
     return this._instance
   }
 
-  init = () => {
+  init = address => {
     const api = this._api
     const abi = this._abi
-    const address = RIGOTOKEN_ADDRESSES[api._rb.network.id]
     this._instance = api.newContract(abi, address).instance
     return this._instance
   }
@@ -39,31 +37,13 @@ class RigoTokenParity {
     return instance.balanceOf.call({}, [accountAddress])
   }
 
-  transfer = (fromAddress, toAddress, amount) => {
-    if (!fromAddress) {
-      throw new Error('fromAddress needs to be provided')
-    }
-    if (!toAddress) {
-      throw new Error('toAddress needs to be provided')
-    }
-    if (!amount) {
-      throw new Error('amount needs to be provided')
+  depositLock = accountAddress => {
+    if (!accountAddress) {
+      throw new Error('accountAddress needs to be provided')
     }
     const instance = this._instance
-    const values = [toAddress, amount]
-    const options = {
-      from: fromAddress
-    }
-    return instance.transfer.estimateGas(options, values).then(gasEstimate => {
-      options.gas = gasEstimate.times(1.2).toFixed(0)
-      console.log(
-        `Transfer GRG: gas estimated as ${gasEstimate.toFixed(0)} setting to ${
-          options.gas
-        }`
-      )
-      return instance.transfer.postTransaction(options, values)
-    })
+    return instance.depositLock.call({}, [accountAddress])
   }
 }
 
-export default RigoTokenParity
+export default TokenWrapperParity

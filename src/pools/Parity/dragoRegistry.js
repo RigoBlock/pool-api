@@ -1,9 +1,9 @@
-// Copyright 2017 Rigo Investment Sarl.
+// Copyright 2017 Rigo Investment Sagl.
 // This file is part of RigoBlock.
 
 import * as abis from '../../contracts/abi'
-import Registry from '../registry'
 import { DRAGOREGISTRY } from '../../utils/const'
+import Registry from '../registry'
 
 class DragoRegistryParity {
   constructor(api) {
@@ -34,7 +34,6 @@ class DragoRegistryParity {
   init = () => {
     const contractAbi = this._abi
     const contractName = this._contractName
-    console.log(contractName)
     return this._registry.instance(contractAbi, contractName).then(contract => {
       this._instance = contract.instance
       this._contract = contract
@@ -52,9 +51,7 @@ class DragoRegistryParity {
 
   fromAddress = dragoAddress => {
     if (!dragoAddress) {
-      throw new Error(
-        `dragoAddress needs to be provided to ${arguments.callee.toString()}`
-      )
+      throw new Error(`dragoAddress needs to be provided to drago`)
     }
     const instance = this._instance
     return instance.fromAddress.call({}, [dragoAddress])

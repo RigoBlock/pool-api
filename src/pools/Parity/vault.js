@@ -1,7 +1,8 @@
-// Copyright 2017 Rigo Investment Sarl.
+// Copyright 2017 Rigo Investment Sagl.
 // This file is part of RigoBlock.
 
 import * as abis from '../../contracts/abi'
+import { WETH_ADDRESSES } from '../../utils/const'
 import Registry from '../registry'
 
 class VaultParity {
@@ -40,6 +41,22 @@ class VaultParity {
     return instance.balanceOf.call({}, [accountAddress])
   }
 
+  getBalance = () => {
+    const api = this._api
+    const instance = this._instance
+    return api.eth.getBalance(instance.address)
+  }
+
+  getBalanceWETH = () => {
+    const api = this._api
+    const instance = this._instance
+    const wethInstance = api.newContract(
+      abis.weth,
+      WETH_ADDRESSES[api._rb.network.id]
+    ).instance
+    return wethInstance.balanceOf.call({}, [instance.address])
+  }
+
   getData = () => {
     const instance = this._instance
     return instance.getData.call({})
@@ -59,7 +76,7 @@ class VaultParity {
     }
     // return instance.buyVault.postTransaction(options, [])
     return instance.buyVault.estimateGas(options, []).then(gasEstimate => {
-      options.gas = gasEstimate.mul(1.2).toFixed(0)
+      options.gas = gasEstimate.times(1.2).toFixed(0)
       console.log(
         `Buy Vault: gas estimated as ${gasEstimate.toFixed(0)} setting to ${
           options.gas
@@ -79,6 +96,13 @@ class VaultParity {
     return instance.getAdminData.call({})
   }
 
+  getTokenBalance = tokenAddress => {
+    const api = this._api
+    const instance = this._instance
+    const erc20Instance = api.newContract(abis.erc20, tokenAddress).instance
+    return erc20Instance.balanceOf.call({}, [instance.address])
+  }
+
   sellVault = (accountAddress, amount) => {
     if (!accountAddress) {
       throw new Error('accountAddress needs to be provided')
@@ -92,7 +116,7 @@ class VaultParity {
       from: accountAddress
     }
     return instance.sellVault.estimateGas(options, values).then(gasEstimate => {
-      options.gas = gasEstimate.mul(1.2).toFixed(0)
+      options.gas = gasEstimate.times(1.2).toFixed(0)
       console.log(
         `Sell Vault: gas estimated as ${gasEstimate.toFixed(0)} setting to ${
           options.gas
@@ -121,7 +145,7 @@ class VaultParity {
     return instance.setTransactionFee
       .estimateGas(options, values)
       .then(gasEstimate => {
-        options.gas = gasEstimate.mul(1.2).toFixed(0)
+        options.gas = gasEstimate.times(1.2).toFixed(0)
         console.log(
           `setTransactionFee Vault: gas estimated as ${gasEstimate.toFixed(
             0

@@ -1,4 +1,4 @@
-// Copyright 2017 Rigo Investment Sarl.
+// Copyright 2017 Rigo Investment Sagl.
 // This file is part of RigoBlock.
 
 import DragoEventfulParity from './Parity/dragoEventful'
@@ -7,13 +7,19 @@ import DragoFactoryWeb3 from './Web3/dragoFactory'
 import DragoParity from './Parity/drago'
 import DragoRegistryParity from './Parity/dragoRegistry'
 import DragoWeb3 from './Web3/drago'
-import EthusdParity from './Parity/ethusd'
 import EtherParity from './Parity/ether'
 import EtherWeb3 from './Web3/ether'
+import EthusdParity from './Parity/ethusd'
+import FundProxyWeb3 from './Web3/fundProxy'
+// import FundProxyParity from './Parity/fundProxy'
 import ExchangeParity from './Parity/exchange'
 import RegistryParity from './registry'
+import RigoTokenFaucetParity from './Parity/rigoTokenFaucet'
+import RigoTokenFaucetWeb3 from './Web3/rigoTokenFaucet'
 import RigoTokenParity from './Parity/rigoToken'
 import RigoTokenWeb3 from './Web3/rigoToken'
+import TokenWrapperParity from './Parity/tokenWrapper'
+import TokenWrapperWeb3 from './Web3/tokenWrapper'
 import VaultEventfulParity from './Parity/vaultEventful'
 import VaultFactoryParity from './Parity/vaultFactory'
 import VaultFactoryWeb3 from './Web3/vaultFactory'
@@ -22,7 +28,7 @@ import VaultWeb3 from './Web3/vault'
 
 class Contract {
   constructor(api) {
-    var isMetaMask = false
+    let isMetaMask = false
     if (!api) {
       throw new Error('API instance needs to be provided to Contract')
     }
@@ -38,6 +44,9 @@ class Contract {
       this._vault = new VaultWeb3(api)
       this._vaultfactory = new VaultFactoryWeb3(api)
       this._rigotoken = new RigoTokenWeb3(api)
+      this._rigotokenfaucet = new RigoTokenFaucetWeb3(api)
+      this._tokenwrapper = new TokenWrapperWeb3(api)
+      this._fundproxy = new FundProxyWeb3(api)
     } else {
       this._drago = new DragoParity(api)
       this._dragoeventful = new DragoEventfulParity(api)
@@ -48,6 +57,9 @@ class Contract {
       this._exchange = new ExchangeParity(api)
       this._registry = new RegistryParity(api)
       this._rigotoken = new RigoTokenParity(api)
+      this._rigotokenfaucet = new RigoTokenFaucetParity(api)
+      this._tokenwrapper = new TokenWrapperParity(api)
+      // this._fundproxy = new RigoTokenParity(api)
       this._vault = new VaultParity(api)
       this._vaulteventful = new VaultEventfulParity(api)
       this._vaultfactory = new VaultFactoryParity(api)
@@ -71,7 +83,9 @@ class Contract {
   }
 
   get dragoeventful() {
-    return this._dragoeventful
+    return typeof this._dragoeventful !== 'undefined'
+      ? this._dragoeventful
+      : this._dragoeventful
   }
 
   get ether() {
@@ -82,12 +96,24 @@ class Contract {
     return this._exchange
   }
 
+  get fundproxy() {
+    return this._fundproxy
+  }
+
   get registry() {
     return this._registry
   }
 
   get rigotoken() {
     return this._rigotoken
+  }
+
+  get rigotokenfaucet() {
+    return this._rigotokenfaucet
+  }
+
+  get tokenwrapper() {
+    return this._tokenwrapper
   }
 
   get vaulteventful() {

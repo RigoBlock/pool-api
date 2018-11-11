@@ -1,10 +1,10 @@
-// Copyright 2017 Rigo Investment Sarl.
+// Copyright 2017 Rigo Investment Sagl.
 // This file is part of RigoBlock.
 
 import * as abis from '../../contracts/abi'
-import Registry from '../registry'
-import { toHex } from '../../utils'
 import { VAULTFACTORY } from '../../utils/const'
+import { toHex } from '../../utils'
+import Registry from '../registry'
 
 class VaultFactoryParity {
   constructor(api) {
@@ -70,9 +70,17 @@ class VaultFactoryParity {
       .estimateGas(options, values)
       .then(gasEstimate => {
         console.log(gasEstimate.toFormat())
-        options.gas = gasEstimate.mul(1.2).toFixed(0)
+        options.gas = gasEstimate.times(1.2).toFixed(0)
         return instance.createVault.postTransaction(options, values)
       })
+  }
+
+  getVaultsByAddress = accountAddress => {
+    if (!accountAddress) {
+      throw new Error('accountAddress needs to be provided')
+    }
+    const instance = this._instance
+    return instance.getVaultsByAddress.call({}, [accountAddress.toLowerCase()])
   }
 }
 

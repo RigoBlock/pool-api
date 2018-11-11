@@ -1,17 +1,23 @@
-// Copyright 2017 Rigo Investment Sarl.
+// Copyright 2017 Rigo Investment Sagl.
 // This file is part of RigoBlock.
 
 import drago from './v2/drago-v2.json'
 import dragoeventful from './v2/dragoEventful-v2.json'
 import dragofactory from './v2/dragoFactory-v2.json'
-import parityregister from './v2/parityRegister.json'
 import dragoregistry from './v2/dragoRegistry-v2.json'
+import erc20 from './v2/erc20.json'
+import ethusd from './v2/ethusd.json'
+import exchange from './v2/exchange.json'
+import fundproxy from './v2/fundProxy.json'
+import parityregister from './v2/parityRegister.json'
 import rigotoken from './v2/rigoToken-v2.json'
+import rigotokenfaucet from './v2/rigoTokenFaucet-v2.json'
+import tokenWrapper from './v2/tokenWrapper-v2.json'
 import vault from './v2/vault-v2.json'
 import vaulteventful from './v2/vaultEventful-v2.json'
 import vaultfactory from './v2/vaultFactory-v2.json'
-import ethusd from './v2/ethusd.json'
-import exchange from './v2/exchange.json'
+import weth from './v2/weth.json'
+import zeroExExchange from './v2/zeroExExchange.json'
 
 // Legacy v1 contracts
 // import vault from './v1/vault.json';
@@ -36,11 +42,17 @@ export {
   vaultfactory,
   dragoregistry,
   exchange,
+  erc20,
   dragofactory,
   drago,
   dragoeventful,
   ethusd,
+  fundproxy,
+  tokenWrapper,
   vaulteventful,
   parityregister,
-  rigotoken
+  rigotoken,
+  rigotokenfaucet,
+  weth,
+  zeroExExchange
 }

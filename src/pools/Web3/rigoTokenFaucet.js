@@ -2,16 +2,15 @@
 // This file is part of RigoBlock.
 
 import * as abis from '../../contracts/abi'
-import { RIGOTOKEN_ADDRESSES } from '../../utils/const'
 import Registry from '../registry'
 
-class RigoTokenWeb3 {
+class RigoTokenFaucetWeb3 {
   constructor(api) {
     if (!api) {
       throw new Error('API instance needs to be provided to Contract')
     }
     this._api = api
-    this._abi = abis.rigotoken
+    this._abi = abis.rigotokenfaucet
     this._registry = new Registry(api)
     this._constunctorName = this.constructor.name
   }
@@ -23,46 +22,34 @@ class RigoTokenWeb3 {
     return this._instance
   }
 
-  init = () => {
+  init = address => {
+    if (!address) {
+      throw new Error('address needs to be provided')
+    }
     const api = this._api
     const abi = this._abi
-    const address = RIGOTOKEN_ADDRESSES[api._rb.network.id]
     this._instance = new api.eth.Contract(abi)
     this._instance.options.address = address
     return this._instance
   }
 
-  balanceOf = accountAddress => {
-    if (!accountAddress) {
-      throw new Error('accountAddress needs to be provided')
-    }
+  drip1Token = fromAddress => {
     const instance = this._instance
-    return instance.methods.balanceOf(accountAddress).call({})
-  }
-
-  transfer = (fromAddress, toAddress, amount) => {
-    if (!toAddress) {
-      throw new Error('toAddress needs to be provided')
-    }
-    if (!amount) {
-      throw new Error('amount needs to be provided')
-    }
-    const instance = this._instance
-    const options = {
+    let options = {
       from: fromAddress
     }
-
+    console.log(instance)
     return instance.methods
-      .transfer(toAddress, amount)
+      .drip1Token()
       .estimateGas(options)
       .then(gasEstimate => {
         console.log(gasEstimate)
         options.gas = gasEstimate
       })
       .then(() => {
-        return instance.methods.transfer(toAddress, amount).send(options)
+        return instance.methods.drip1Token().send(options)
       })
   }
 }
 
-export default RigoTokenWeb3
+export default RigoTokenFaucetWeb3

@@ -1,9 +1,9 @@
-// Copyright 2017 Rigo Investment Sarl.
+// Copyright 2017 Rigo Investment Sagl.
 // This file is part of RigoBlock.
 
 import * as abis from '../../contracts/abi'
-import Registry from '../registry'
 import { VAULTFACTORY } from '../../utils/const'
+import Registry from '../registry'
 
 class VaultFactoryWeb3 {
   constructor(api) {

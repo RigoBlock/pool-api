@@ -1,10 +1,10 @@
-// Copyright 2017 Rigo Investment Sarl.
+// Copyright 2017 Rigo Investment Sagl.
 // This file is part of RigoBlock.
 
 import * as abis from '../../contracts/abi'
-import Registry from '../registry'
-import { toHex } from '../../utils'
 import { DRAGOFACTORY } from '../../utils/const'
+import { toHex } from '../../utils'
+import Registry from '../registry'
 
 class DragoFactoryParity {
   constructor(api) {
@@ -65,13 +65,21 @@ class DragoFactoryParity {
     const options = {
       from: accountAddress
     }
-    const values = [dragoName, dragoSymbol, accountAddress]
+    const values = [dragoName.toLower(), dragoSymbol, accountAddress]
     return instance.createDrago
       .estimateGas(options, values)
       .then(gasEstimate => {
-        options.gas = gasEstimate.mul(1.2).toFixed(0)
+        options.gas = gasEstimate.times(1.2).toFixed(0)
         return instance.createDrago.postTransaction(options, values)
       })
+  }
+
+  getDragosByAddress = accountAddress => {
+    if (!accountAddress) {
+      throw new Error('accountAddress needs to be provided')
+    }
+    const instance = this._instance
+    return instance.getDragosByAddress.call({}, [accountAddress.toLowerCase()])
   }
 }
 
